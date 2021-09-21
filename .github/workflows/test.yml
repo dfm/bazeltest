@@ -9,4 +9,5 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - run: bazel build --cpu=darwin_arm64 -s @llvm-project//llvm:tblgen
+      - run: |
+        bazel build --cpu=darwin_arm64 -s @subrepo//:get_cpu_info
