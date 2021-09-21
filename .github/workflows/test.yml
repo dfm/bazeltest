@@ -10,17 +10,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          bazelisk clean --expunge
           bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
           bazelisk build --cpu=darwin_arm64 -s @subproject//:get_cpu_info
           cat bazel-bin/cpu_info.txt
+          cat bazel-bin/external/subproject/cpu_info.txt
 
   platforms:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - run: |
-          bazelisk clean --expunge
           bazelisk build --platforms=//:darwin_arm64 -s //:get_cpu_info
           bazelisk build --platforms=//:darwin_arm64 -s @subproject//:get_cpu_info
           cat bazel-bin/cpu_info.txt
+          cat bazel-bin/external/subproject/cpu_info.txt
+
+  llvm:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd llvm-test
+          bazelisk build --platforms=//:darwin_arm64 --cxxopt="-std=c++14" -s @llvm-project//llvm:tblgen
