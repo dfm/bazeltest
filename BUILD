@@ -1,8 +1,9 @@
-cc_library(
-    name = "test",
-    srcs = ["test.cc"],
-    copts = ["-std=c++14"],
-    deps = [
-        "@llvm-project//llvm:Support"
-    ]
+genrule(
+    name = "get_cpu_info",
+    outs = ["cpu_info.txt"],
+    cmd = select({
+        "@bazel_tools//src/conditions:darwin_arm64": 'echo "darwin_arm64" > $@',
+        "@bazel_tools//src/conditions:darwin_x86_64": 'echo "darwin_x86_64" > $@',
+        "//conditions:default": 'echo "unknown" > $@'
+    })
 )
