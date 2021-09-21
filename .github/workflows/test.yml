@@ -13,8 +13,6 @@ jobs:
           bazelisk clean --expunge
           bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
           cat bazel-bin/cpu_info.txt
-        env:
-          USE_BAZEL_VERSION: last_rc
       - run: |
           bazelisk clean --expunge
           bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
@@ -28,22 +26,11 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           bazelisk clean --expunge
-          bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
+          bazelisk build --platforms=//:darwin_x86_64 -s //:get_cpu_info
           cat bazel-bin/cpu_info.txt
         env:
           USE_BAZEL_VERSION: last_green
       - run: |
           bazelisk clean --expunge
-          bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
-          cat bazel-bin/cpu_info.txt
-        env:
-          USE_BAZEL_VERSION: last_rc
-
-  just-one:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          bazelisk clean --expunge
-          bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
+          bazelisk build --platforms=//:darwin_x86_64 -s //:get_cpu_info
           cat bazel-bin/cpu_info.txt
