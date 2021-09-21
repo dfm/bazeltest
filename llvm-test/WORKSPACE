@@ -12,12 +12,12 @@ http_archive(
 )
 
 # Replace with the LLVM commit you want to use.
-LLVM_COMMIT = "9197834535364efff505580ef940ad41cd293275"
+LLVM_COMMIT = "33e1713a00a5291e5de658d0eb0aebdbf1d3aa03"
 
 # The easiest way to calculate this for a new commit is to set it to empty and
 # then run a bazel build and it will report the digest necessary to cache the
 # archive and make the build reproducible.
-LLVM_SHA256 = "f66c4a77f49e62987d690836c9f7e8609500bf5856b4af11e73dbfb0b82a932f"
+LLVM_SHA256 = "4c4ed0bc2e7da5516d6a95fcaf4ea83fb7e5720f61ebc30db8cb95a15ba6b628"
 
 http_archive(
     name = "llvm-raw",
@@ -25,8 +25,6 @@ http_archive(
     sha256 = LLVM_SHA256,
     strip_prefix = "llvm-project-" + LLVM_COMMIT,
     urls = ["https://github.com/llvm/llvm-project/archive/{commit}.tar.gz".format(commit = LLVM_COMMIT)],
-    patch_args = ["-p1"],
-    patches = ["//:llvm.patch"],
 )
 
 load("@llvm-raw//utils/bazel:configure.bzl", "llvm_configure", "llvm_disable_optional_support_deps")
