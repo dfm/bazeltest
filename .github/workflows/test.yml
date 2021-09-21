@@ -5,7 +5,7 @@ on:
   push:
     branches: [ main ]
 jobs:
-  build:
+  order1:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,11 +21,29 @@ jobs:
           cat bazel-bin/cpu_info.txt
         env:
           USE_BAZEL_VERSION: last_green
+
+  order2:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
       - run: |
-          bazel clean --expunge
-          USE_BAZEL_VERSION=last_rc bazelisk build --cpu=darwin_arm64 -s @subrepo//:get_cpu_info
-          cat bazel-bin/external/subrepo/cpu_info.txt
+          bazelisk clean --expunge
+          bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
+          cat bazel-bin/cpu_info.txt
+        env:
+          USE_BAZEL_VERSION: last_green
       - run: |
-          bazel clean --expunge
-          USE_BAZEL_VERSION=last_green bazelisk build --cpu=darwin_arm64 -s @subrepo//:get_cpu_info
-          cat bazel-bin/external/subrepo/cpu_info.txt
+          bazelisk clean --expunge
+          bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
+          cat bazel-bin/cpu_info.txt
+        env:
+          USE_BAZEL_VERSION: last_rc
+
+  just-one:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          bazelisk clean --expunge
+          bazelisk build --cpu=darwin_arm64 -s //:get_cpu_info
+          cat bazel-bin/cpu_info.txt
